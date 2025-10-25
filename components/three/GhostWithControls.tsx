@@ -1,6 +1,6 @@
 'use client'
 
-import { Stars } from '@react-three/drei'
+import { Stars, Environment } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -10,6 +10,7 @@ import { WiggleBone } from '../../lib/wiggle'
 
 interface GhostWithControlsProps {
   scrollProgress: number
+  onHideUIChange?: (hideUI: boolean) => void
 }
 
 interface ControlValues {
@@ -55,6 +56,9 @@ interface ControlValues {
   pointLight1Intensity: number
   pointLight2Intensity: number
   pointLight3Intensity: number
+  
+  // Recording Mode
+  hideUI: boolean
 }
 
 const defaultValues: ControlValues = {
@@ -85,6 +89,7 @@ const defaultValues: ControlValues = {
   pointLight1Intensity: 4.0,
   pointLight2Intensity: 4.0,
   pointLight3Intensity: 3.0,
+  hideUI: false,
 }
 
 function Ghost({ scrollProgress, controls }: { scrollProgress: number, controls: ControlValues }) {
@@ -120,12 +125,13 @@ function Ghost({ scrollProgress, controls }: { scrollProgress: number, controls:
             
             if (mesh.material) {
               const material = mesh.material as THREE.MeshStandardMaterial
-              // Apply initial material values
-              //comment to change
-              material.metalness = controls.metalness
-              material.roughness = controls.roughness
-              material.emissive = new THREE.Color(controls.emissiveColor)
-              material.emissiveIntensity = controls.emissiveIntensity
+              // Chrome-like material properties for reflective surface
+              material.metalness = 0.95
+              material.roughness = 0.05  
+              material.envMapIntensity = 3.0
+              // Very minimal emissive - let lighting do the work
+              material.emissive = new THREE.Color(0x000000)
+              material.emissiveIntensity = 0.0
               material.needsUpdate = true
               materials.push(material)
             }
@@ -201,13 +207,16 @@ function Ghost({ scrollProgress, controls }: { scrollProgress: number, controls:
     )
   }, [])
   
-  // Update materials when controls change
+  // Update materials when controls change (chrome materials don't need much updating)
   useEffect(() => {
     materialsRef.current.forEach(material => {
-      material.metalness = controls.metalness
-      material.roughness = controls.roughness
-      material.emissive = new THREE.Color(controls.emissiveColor)
-      material.emissiveIntensity = controls.emissiveIntensity
+      // Keep chrome properties consistent
+      material.metalness = 0.95
+      material.roughness = 0.05
+      material.envMapIntensity = 3.0
+      // Only update emissive if using very subtle effects
+      material.emissive = new THREE.Color(0x000000)
+      material.emissiveIntensity = 0.0
       material.needsUpdate = true
     })
   }, [controls.metalness, controls.roughness, controls.emissiveIntensity, controls.emissiveColor])
@@ -357,7 +366,7 @@ function ControlPanel({ controls, setControls }: { controls: ControlValues, setC
     console.log('🎮 Control Panel state, isOpen:', isOpen)
   }, [isOpen])
   
-  const handleChange = (key: keyof ControlValues, value: number | string) => {
+  const handleChange = (key: keyof ControlValues, value: number | string | boolean) => {
     setControls(prev => ({ ...prev, [key]: value }))
   }
   
@@ -405,6 +414,25 @@ function ControlPanel({ controls, setControls }: { controls: ControlValues, setC
       >
         <div className="p-6 overflow-y-auto max-h-[70vh]">
           <h2 className="text-xl font-bold text-white mb-4">Ghost Controls</h2>
+          
+          {/* Recording Mode Toggle */}
+          <div className="mb-6 p-4 bg-red-500/20 border border-red-500/40 rounded-xl">
+            <h3 className="text-sm font-semibold text-red-400 mb-3">🎥 Recording Mode</h3>
+            <label className="flex items-center space-x-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={controls.hideUI}
+                onChange={(e) => handleChange('hideUI', e.target.checked)}
+                className="w-5 h-5 text-red-500 bg-transparent border-2 border-red-500 rounded focus:ring-red-500 focus:ring-2"
+              />
+              <span className="text-white font-medium">
+                Hide All UI for Recording
+              </span>
+            </label>
+            <p className="text-red-300/70 text-xs mt-2">
+              Toggles header and all text content for clean video capture
+            </p>
+          </div>
           
           {/* Position Controls */}
           <div className="mb-6">
@@ -805,7 +833,7 @@ function ControlPanel({ controls, setControls }: { controls: ControlValues, setC
   )
 }
 
-export default function GhostWithControls({ scrollProgress }: GhostWithControlsProps) {
+export default function GhostWithControls({ scrollProgress, onHideUIChange }: GhostWithControlsProps) {
   const [controls, setControls] = useState<ControlValues>(defaultValues)
   
   // Debug initial controls
@@ -815,6 +843,11 @@ export default function GhostWithControls({ scrollProgress }: GhostWithControlsP
     console.log('🎮 Specifically, positionY from controls:', controls.positionY)
     console.log('🎮 Specifically, positionY from defaultValues:', defaultValues.positionY)
   }, [])
+  
+  // Notify parent when hideUI changes
+  useEffect(() => {
+    onHideUIChange?.(controls.hideUI)
+  }, [controls.hideUI, onHideUIChange])
   
   return (
     <div className="w-full h-full">
@@ -828,33 +861,22 @@ export default function GhostWithControls({ scrollProgress }: GhostWithControlsP
         }}
         shadows
       >
-        {/* Dynamic lighting with controls */}
-        <ambientLight intensity={controls.ambientIntensity} />
-        <directionalLight 
-          position={[10, 10, 5]} 
-          intensity={controls.directionalIntensity} 
-          castShadow 
-        />
+        {/* Environment for chrome reflections */}
+        <Environment preset="city" />
         
-        <pointLight position={[-5, 2, -3]} color="#8B5CF6" intensity={controls.pointLight1Intensity} />
-        <pointLight position={[5, 2, -3]} color="#EC4899" intensity={controls.pointLight2Intensity} />
-        <pointLight position={[0, 4, 2]} color="#3B82F6" intensity={controls.pointLight3Intensity} />
+        {/* Minimal lighting - let the chrome material do the work */}
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[10, 10, 5]} intensity={1.0} castShadow />
         
-        {/* Additional dramatic lighting */}
-        <pointLight position={[-8, -3, 4]} color="#06B6D4" intensity={2.5} />
-        <pointLight position={[8, -3, 4]} color="#F59E0B" intensity={2.5} />
-        <pointLight position={[0, 8, -6]} color="#EF4444" intensity={3.0} />
-        <pointLight position={[-4, 6, 8]} color="#10B981" intensity={2.0} />
-        <pointLight position={[4, 6, 8]} color="#A855F7" intensity={2.0} />
-        <spotLight 
-          position={[0, 10, 0]} 
-          target-position={[0, 0, 0]}
-          angle={0.5} 
-          penumbra={0.5} 
-          intensity={4.0} 
-          color="#FFFFFF"
-          castShadow
-        />
+        {/* Multiple colored lights for chrome reflections */}
+        <pointLight position={[-10, 5, -5]} color="#8B5CF6" intensity={2.0} />
+        <pointLight position={[10, 5, -5]} color="#EC4899" intensity={2.0} />
+        <pointLight position={[0, 10, 5]} color="#3B82F6" intensity={1.5} />
+        <pointLight position={[-8, -5, 8]} color="#06B6D4" intensity={1.8} />
+        <pointLight position={[8, -5, 8]} color="#F59E0B" intensity={1.8} />
+        <pointLight position={[0, -8, -8]} color="#EF4444" intensity={2.2} />
+        <pointLight position={[-5, 8, -2]} color="#10B981" intensity={1.6} />
+        <pointLight position={[5, 8, -2]} color="#A855F7" intensity={1.6} />
         
         <color attach="background" args={['#0a0a0f']} />
         <fog attach="fog" args={['#0a0a0f', 5, 20]} />

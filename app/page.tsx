@@ -14,6 +14,7 @@ const GhostCanvas = dynamic(() => import('../components/three/GhostWithControls'
 
 export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [hideUI, setHideUI] = useState(false)
   const { scrollYProgress } = useScroll()
   
   useEffect(() => {
@@ -29,11 +30,12 @@ export default function Home() {
     <main className="relative min-h-screen">
       {/* Fixed 3D Ghost Canvas Background - with controls at higher z-index */}
       <div className="fixed inset-0 z-0">
-        <GhostCanvas scrollProgress={scrollProgress} />
+        <GhostCanvas scrollProgress={scrollProgress} onHideUIChange={setHideUI} />
       </div>
       
-      {/* Modern Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 glass backdrop-blur-xl border-b border-white/10">
+      {/* Modern Header - Hidden in recording mode */}
+      {!hideUI && (
+        <header className="fixed top-0 left-0 right-0 z-50 glass backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="text-2xl font-bold gradient-text">Spectre</div>
@@ -53,10 +55,12 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </header>
+        </header>
+      )}
 
-      {/* Premium Content Overlay */}
-      <div className="relative z-[5]">
+      {/* Premium Content Overlay - Hidden in recording mode */}
+      {!hideUI && (
+        <div className="relative z-[5]">
         {/* Hero Section */}
         <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
           <motion.div 
@@ -398,7 +402,8 @@ export default function Home() {
             </div>
           </div>
         </footer>
-      </div>
+        </div>
+      )}
     </main>
   )
 }
