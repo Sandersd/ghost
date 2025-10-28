@@ -134,6 +134,13 @@ function Ghost({ scrollProgress, controls }: { scrollProgress: number, controls:
               material.emissiveIntensity = 0.0
               material.needsUpdate = true
               materials.push(material)
+              console.log('🎨 Material setup:', {
+                color: material.color.getHexString(),
+                emissive: material.emissive.getHexString(),
+                emissiveIntensity: material.emissiveIntensity,
+                metalness: material.metalness,
+                roughness: material.roughness
+              })
             }
           }
         })
@@ -282,6 +289,8 @@ function Ghost({ scrollProgress, controls }: { scrollProgress: number, controls:
     if (!groupRef.current) return
     
     const time = state.clock.getElapsedTime()
+    
+    // Chrome material doesn't need color animation - let lighting and environment do the work
     
     // Update wiggle bones
     wiggleBones.forEach(wb => {
@@ -454,7 +463,7 @@ function ControlPanel({ controls, setControls }: { controls: ControlValues, setC
                 <label className="text-xs text-gray-400">Y: {controls.positionY.toFixed(2)}</label>
                 <input
                   type="range"
-                  min="-25"
+                  min="-100"
                   max="25"
                   step="0.1"
                   value={controls.positionY}

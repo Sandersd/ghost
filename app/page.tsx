@@ -38,13 +38,23 @@ export default function Home() {
         <header className="fixed top-0 left-0 right-0 z-50 glass backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="text-2xl font-bold gradient-text">Spectre</div>
+            {/* Logo and Brand */}
+            <div className="flex items-center space-x-3">
+              {/* Simple geometric logo */}
+              <div className="relative w-10 h-10">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg opacity-20 blur-xl"></div>
+                <div className="relative w-10 h-10 border-2 border-purple-400 rounded-lg rotate-12 flex items-center justify-center">
+                  <div className="w-5 h-5 bg-gradient-to-br from-purple-500 to-pink-500 rounded-sm rotate-45"></div>
+                </div>
+              </div>
+              <div className="text-xl font-display text-white">Spectre</div>
+            </div>
             
-            <nav className="hidden md:flex items-center space-x-8">
-              <button className="text-white/80 hover:text-white transition-colors duration-300 font-light">Privacy</button>
-              <button className="text-white/80 hover:text-white transition-colors duration-300 font-light">Security</button>
-              <button className="text-white/80 hover:text-white transition-colors duration-300 font-light">Enterprise</button>
-              <button className="text-white/80 hover:text-white transition-colors duration-300 font-light">Support</button>
+            <nav className="hidden md:flex items-center space-x-10">
+              <button className="text-white/70 hover:text-white transition-colors duration-300 font-accent text-sm tracking-wider">PRIVACY</button>
+              <button className="text-white/70 hover:text-white transition-colors duration-300 font-accent text-sm tracking-wider">SECURITY</button>
+              <button className="text-white/70 hover:text-white transition-colors duration-300 font-accent text-sm tracking-wider">ENTERPRISE</button>
+              <button className="text-white/70 hover:text-white transition-colors duration-300 font-accent text-sm tracking-wider">DOCS</button>
             </nav>
             
             <div className="flex items-center space-x-4">
@@ -61,45 +71,64 @@ export default function Home() {
       {/* Premium Content Overlay - Hidden in recording mode */}
       {!hideUI && (
         <div className="relative z-[5]">
-        {/* Hero Section */}
-        <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
-          <motion.div 
-            style={{ y: heroY }}
-            className="text-center space-y-12 px-6 max-w-7xl mx-auto"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 60 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, delay: 0.3 }}
-              className="space-y-8"
-            >
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.9] tracking-tight">
-                <span className="gradient-text">Spectre</span>
-                <br />
-                <span className="text-white/95 font-extralight">AI Privacy</span>
-              </h1>
-              
-              <p className="text-xl sm:text-2xl lg:text-3xl text-white/90 max-w-4xl mx-auto font-light leading-relaxed tracking-wide">
-                The world's most secure AI infrastructure for <span className="gradient-text font-medium">ghost data</span>
-              </p>
-            </motion.div>
+        {/* Revolutionary Hero Section */}
+        <section className="min-h-screen relative overflow-hidden pt-20">
+          {/* Asymmetric Grid Container - Centered with ghost space */}
+          <div className="max-w-8xl mx-auto grid grid-cols-12 grid-rows-12 h-screen gap-8 p-12 pr-96">
             
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
+            {/* Main Title Block - Now starts from top */}
+            <motion.div 
+              initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 1.5 }}
-              className="flex flex-col sm:flex-row gap-8 justify-center items-center pt-8"
+              transition={{ duration: 1.5, delay: 0.5 }}
+              className="col-span-8 row-span-5 row-start-2 col-start-1 p-20 flex flex-col justify-center"
             >
-              <button className="glass-strong glow-purple px-12 py-6 rounded-3xl text-xl font-semibold text-white hover:scale-110 transition-all duration-500 pulse-glow shadow-2xl">
-                Secure Your Chats
+              <div className="space-y-12">
+                <div className="font-accent text-xl text-purple-300 pt-6 tracking-wider">
+                  ARTIFICIAL INTELLIGENCE
+                </div>
+                <h1 className="font-heading text-8xl lg:text-9xl leading-[0.8] text-white">
+                  ZERO
+                  <br />
+                  <span className="font-display text-purple-300 tracking-normal normal-case">Knowledge</span>
+                  <br />
+                  PRIVACY
+                </h1>
+                <div className="w-40 h-2 bg-gradient-to-r from-purple-500 to-pink-500"></div>
+              </div>
+            </motion.div>
+
+            {/* Description Block - Middle */}
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1.2 }}
+              className="col-span-8 row-span-2 row-start-8 col-start-1 p-12"
+            >
+              <div className="space-y-6">
+                {/* <div className="font-accent text-lg text-white/60">TECHNOLOGY</div> */}
+                <p className="font-body text-xl text-white/90 pl-8 leading-relaxed">
+                  Military-grade encryption meets federated learning. Your data never leaves your infrastructure.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Action Block - Bottom */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 1.5 }}
+              className="col-span-8 row-span-2 row-start-10 col-start-1 flex items-center justify-start space-x-8 p-12 pl-20"
+            >
+              <button className="px-12 py-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl font-heading text-lg text-white hover:scale-110 transition-all duration-500 shadow-2xl">
+                DEPLOY NOW
               </button>
-              
-              <button className="glass px-12 py-6 rounded-3xl text-xl font-light text-white/95 hover:scale-110 transition-all duration-500 border-white/30 shadow-xl">
-                Learn More
+              <button className="px-12 py-6 border border-white/20 rounded-3xl font-accent text-sm text-white/80 hover:scale-110 hover:border-purple-300 transition-all duration-500">
+                DOCUMENTATION
               </button>
             </motion.div>
-          </motion.div>
-          
+
+          </div>
         </section>
         
         {/* Features Section */}
@@ -112,10 +141,10 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-center mb-24"
             >
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl font-bold mb-12 leading-tight">
+              <h2 className="text-6xl sm:text-7xl lg:text-8xl font-display mb-12 leading-tight tracking-tighter">
                 <span className="gradient-text">Privacy</span> First AI
               </h2>
-              <p className="text-2xl text-white/80 max-w-4xl mx-auto font-light leading-relaxed">
+              <p className="text-2xl text-white/80 max-w-4xl mx-auto font-body font-light leading-relaxed">
                 Enterprise-grade AI infrastructure with zero-knowledge architecture
               </p>
             </motion.div>
@@ -170,8 +199,8 @@ export default function Home() {
                   <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-700`} />
                   <div className="relative z-10">
                     <div className="text-5xl mb-6">{feature.icon}</div>
-                    <h3 className="text-2xl font-bold mb-6 text-white">{feature.title}</h3>
-                    <p className="text-white/80 leading-relaxed font-light text-lg">{feature.description}</p>
+                    <h3 className="text-2xl font-heading mb-6 text-white">{feature.title}</h3>
+                    <p className="text-white/80 leading-relaxed font-body text-lg">{feature.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -189,16 +218,16 @@ export default function Home() {
               viewport={{ once: true }}
               className="space-y-16"
             >
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl font-bold leading-tight">
+              <h2 className="text-6xl sm:text-7xl lg:text-8xl font-display leading-tight tracking-tighter">
                 Enterprise <span className="gradient-text">Trust</span>
               </h2>
               
               <div className="glass-strong p-16 rounded-3xl max-w-5xl mx-auto relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-600/20 to-cyan-600/20" />
                 <div className="relative z-10">
-                  <p className="text-3xl sm:text-4xl text-white/95 leading-relaxed mb-12 font-light">
+                  <p className="text-3xl sm:text-4xl text-white/95 leading-relaxed mb-12 font-heading font-light">
                     &ldquo;Privacy isn&apos;t just a feature—<br />
-                    <span className="gradient-text font-medium">it&apos;s our foundation</span>&rdquo;
+                    <span className="gradient-text font-display font-medium">it&apos;s our foundation</span>&rdquo;
                   </p>
                   <div className="w-32 h-px bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 mx-auto" />
                 </div>
@@ -239,10 +268,10 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-center mb-24"
             >
-              <h2 className="text-6xl sm:text-7xl lg:text-8xl font-bold mb-12">
+              <h2 className="text-6xl sm:text-7xl lg:text-8xl font-display mb-12 tracking-tighter">
                 <span className="gradient-text">Privacy</span> Plans
               </h2>
-              <p className="text-2xl text-white/80 max-w-4xl mx-auto font-light">
+              <p className="text-2xl text-white/80 max-w-4xl mx-auto font-body font-light">
                 Enterprise-grade AI privacy for every organization
               </p>
             </motion.div>
@@ -312,10 +341,10 @@ export default function Home() {
                   )}
                   
                   <div className="text-center mb-12">
-                    <h3 className="text-3xl font-bold text-white mb-3">{tier.name}</h3>
-                    <p className="text-white/70 font-light mb-6">{tier.description}</p>
+                    <h3 className="text-3xl font-heading text-white mb-3">{tier.name}</h3>
+                    <p className="text-white/70 font-body font-light mb-6">{tier.description}</p>
                     <div className="flex items-baseline justify-center">
-                      <span className="text-6xl font-black gradient-text">{tier.price}</span>
+                      <span className="text-6xl font-display gradient-text">{tier.price}</span>
                       <span className="text-white/60 ml-3 text-xl">{tier.period}</span>
                     </div>
                   </div>
@@ -324,7 +353,7 @@ export default function Home() {
                     {tier.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-center text-white/90 text-lg">
                         <span className="text-green-400 mr-4 text-xl">✓</span>
-                        <span className="font-light">{feature}</span>
+                        <span className="font-body font-light">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -354,22 +383,22 @@ export default function Home() {
               viewport={{ once: true }}
               className="space-y-16"
             >
-              <h2 className="text-7xl sm:text-8xl lg:text-9xl font-black leading-[0.85]">
+              <h2 className="text-7xl sm:text-8xl lg:text-9xl font-display leading-[0.85] tracking-tighter">
                 Ready to
                 <br />
                 <span className="gradient-text">Secure?</span>
               </h2>
               
-              <p className="text-3xl text-white/90 max-w-3xl mx-auto leading-relaxed font-light">
+              <p className="text-3xl text-white/90 max-w-3xl mx-auto leading-relaxed font-body font-light">
                 Join Fortune 500 companies protecting their AI infrastructure
               </p>
               
               <div className="flex flex-col sm:flex-row gap-8 justify-center items-center pt-8">
-                <button className="glass-strong glow-purple px-16 py-8 rounded-3xl text-2xl font-bold text-white hover:scale-110 transition-all duration-500 pulse-glow shadow-2xl">
+                <button className="glass-strong glow-purple px-16 py-8 rounded-3xl text-2xl font-heading text-white hover:scale-110 transition-all duration-500 pulse-glow shadow-2xl">
                   Start Secure Trial
                 </button>
                 
-                <button className="glass px-16 py-8 rounded-3xl text-2xl font-light text-white/95 hover:scale-110 transition-all duration-500 border-white/30 shadow-xl">
+                <button className="glass px-16 py-8 rounded-3xl text-2xl font-body font-light text-white/95 hover:scale-110 transition-all duration-500 border-white/30 shadow-xl">
                   Request Demo
                 </button>
               </div>
@@ -385,12 +414,12 @@ export default function Home() {
         <footer className="py-24 border-t border-white/10">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center space-y-8">
-              <h3 className="text-4xl font-bold gradient-text">Spectre AI Privacy</h3>
-              <p className="text-white/70 text-xl font-light">Securing the future of artificial intelligence</p>
+              <h3 className="text-4xl font-display gradient-text">Spectre AI Privacy</h3>
+              <p className="text-white/70 text-xl font-body font-light">Securing the future of artificial intelligence</p>
               
               <div className="flex justify-center space-x-12">
                 {['Security', 'Compliance', 'Documentation', 'Support'].map((link) => (
-                  <button key={link} className="text-white/70 hover:text-white transition-colors duration-500 text-lg font-light">
+                  <button key={link} className="text-white/70 hover:text-white transition-colors duration-500 text-lg font-body font-light">
                     {link}
                   </button>
                 ))}
